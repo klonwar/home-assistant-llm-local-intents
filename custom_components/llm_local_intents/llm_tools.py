@@ -99,7 +99,6 @@ def _build_description(descriptor: IntentDescriptor) -> str:
     return (
         f"{descriptor.description}\n"
         f"Examples: {examples}\n"
-        "Это локальный Assist-инструмент; не заменяй его широким вызовом "
-        "native area/domain. This is a local Assist tool; do not replace it "
-        "with a broad native area/domain call."
+        "Exact local Assist intent; use for matching requests, not broad "
+        "area/domain actions."
     )

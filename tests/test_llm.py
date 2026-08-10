@@ -224,11 +224,22 @@ def test_catalog_skips_unknown_handlers() -> None:
 
 
 def test_generic_prompt_is_language_aware_and_project_independent() -> None:
-    assert "Hallway" not in policy_for_language("en")
-    assert "Коридор" not in policy_for_language("ru")
-    assert "local" in policy_for_language("en").lower()
-    assert "локаль" in policy_for_language("ru").lower()
-    assert policy_for_language("de") == policy_for_language("en")
+    english = policy_for_language("en")
+    russian = policy_for_language("ru")
+
+    assert "Hallway" not in english
+    assert "Коридор" not in russian
+    assert english.startswith("<local_assist_tools_policy>")
+    assert english.endswith("</local_assist_tools_policy>")
+    assert russian.startswith("<local_assist_tools_policy>")
+    assert russian.endswith("</local_assist_tools_policy>")
+    assert "local tool" in english.lower()
+    assert "локаль" in russian.lower()
+    assert "structured tool interface" in english.lower()
+    assert "структурированный tool-call" in russian.lower()
+    assert "speech" in english
+    assert "speech" in russian
+    assert policy_for_language("de") == english
 
 
 def test_local_tool_calls_bound_intent_without_native_fallback() -> None:
@@ -264,6 +275,27 @@ def test_local_tool_calls_bound_intent_without_native_fallback() -> None:
     )
     assert result["success"] is True
     assert calls == [("ExampleIntent", {"level": 2})]
+
+
+def test_local_tool_description_keeps_only_compact_local_hint() -> None:
+    descriptor = build_catalog(
+        {
+            "intents": {
+                "ExampleIntent": {
+                    "description": "Example",
+                    "examples": ["do example"],
+                }
+            }
+        }
+    ).descriptors[0]
+
+    description = LocalAssistTool(descriptor).description
+
+    assert description is not None
+    assert "Examples: \"do example\"" in description
+    assert "Exact local Assist intent" in description
+    assert "broad area/domain actions" in description
+    assert "Это локальный" not in description
 
 
 def test_async_get_tools_includes_prompt_after_setup() -> None:
