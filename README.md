@@ -100,3 +100,4 @@ The GitHub workflows also run HACS and Hassfest validation. Real Home Assistant
 reload and LLM acceptance tests are documented in the configuration handoff and
 must be run in the target HA instance. Release Please creates releases from
 Conventional Commits merged into `main`.
+
