@@ -1,0 +1,12 @@
+{
+  "domain": "llm_local_intents",
+  "name": "LLM Local Intents",
+  "codeowners": [],
+  "config_flow": false,
+  "documentation": "https://github.com/klonwar/home-assistant-llm-local-intents",
+  "integration_type": "service",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/klonwar/home-assistant-llm-local-intents/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}
