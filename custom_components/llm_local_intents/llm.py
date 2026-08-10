@@ -6,7 +6,9 @@ from homeassistant.components import llm
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.llm import LLMContext
 
+from . import get_catalog
 from .llm_tools import build_tools
+from .prompt import policy_for_language
 
 
 @callback
@@ -15,8 +17,12 @@ def async_get_tools(
     llm_context: LLMContext,
     api_id: str,
 ) -> llm.LLMTools | None:
-    """Return this integration's LLM tools, when any are available."""
-    tools = build_tools()
+    """Return the current local Assist tools for one LLM request."""
+    catalog = get_catalog(hass)
+    tools = build_tools(catalog)
     if not tools:
         return None
-    return llm.LLMTools(tools=tools)
+    return llm.LLMTools(
+        tools=tools,
+        prompt=policy_for_language(getattr(llm_context, "language", None)),
+    )

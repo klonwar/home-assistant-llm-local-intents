@@ -15,12 +15,16 @@ SEMVER_PATTERN = re.compile(
 
 
 def test_package_contains_minimal_llm_platform() -> None:
-    """The package exposes only the initial LLM Local Intents skeleton."""
+    """The package contains the local-intent runtime and LLM platform."""
     assert INTEGRATION_DIR.is_dir()
     assert (INTEGRATION_DIR / "__init__.py").is_file()
     assert (INTEGRATION_DIR / "const.py").is_file()
     assert (INTEGRATION_DIR / "llm.py").is_file()
     assert (INTEGRATION_DIR / "llm_tools.py").is_file()
+    assert (INTEGRATION_DIR / "catalog.py").is_file()
+    assert (INTEGRATION_DIR / "intent_adapter.py").is_file()
+    assert (INTEGRATION_DIR / "prompt.py").is_file()
+    assert (INTEGRATION_DIR / "schema.py").is_file()
     assert (INTEGRATION_DIR / "brand" / "icon.png").is_file()
     assert not (INTEGRATION_DIR / "config_flow.py").exists()
     assert not (INTEGRATION_DIR / "prompts").exists()
@@ -32,6 +36,7 @@ def test_package_contains_minimal_llm_platform() -> None:
     assert manifest["domain"] == "llm_local_intents"
     assert manifest["name"] == "LLM Local Intents"
     assert manifest["config_flow"] is False
+    assert manifest["after_dependencies"] == ["intent_script"]
     assert SEMVER_PATTERN.fullmatch(manifest["version"])
     assert manifest["version"] == "0.1.0"
 
