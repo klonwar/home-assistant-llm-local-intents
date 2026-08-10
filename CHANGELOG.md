@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/klonwar/home-assistant-llm-local-intents/compare/v0.2.0...v0.3.0) (2026-08-10)
+
+
+### Features
+
+* test better prompt organization ([1445379](https://github.com/klonwar/home-assistant-llm-local-intents/commit/1445379684ac14280a06cb87fb84c8fa448b100d))
+
 ## [0.2.0](https://github.com/klonwar/home-assistant-llm-local-intents/compare/v0.1.0...v0.2.0) (2026-08-10)
 
 
