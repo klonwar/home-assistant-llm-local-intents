@@ -37,6 +37,9 @@ def test_package_contains_minimal_llm_platform() -> None:
     assert manifest["name"] == "LLM Local Intents"
     assert manifest["config_flow"] is False
     assert manifest["after_dependencies"] == ["intent_script"]
+    manifest_keys = list(manifest)
+    assert manifest_keys[:2] == ["domain", "name"]
+    assert manifest_keys[2:] == sorted(manifest_keys[2:])
     assert SEMVER_PATTERN.fullmatch(manifest["version"])
     assert manifest["version"] == "0.1.0"
 

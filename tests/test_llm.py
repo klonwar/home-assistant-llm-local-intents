@@ -10,6 +10,7 @@ import pytest
 
 def _install_homeassistant_stubs() -> None:
     """Provide the small Home Assistant surface used by the skeleton."""
+    voluptuous = ModuleType("voluptuous")
     homeassistant = ModuleType("homeassistant")
     components = ModuleType("homeassistant.components")
     llm = ModuleType("homeassistant.components.llm")
@@ -33,6 +34,19 @@ def _install_homeassistant_stubs() -> None:
         def __init__(self, *, tools: list[Tool], prompt: str | None = None) -> None:
             self.tools = tools
             self.prompt = prompt
+
+    class Schema:
+        def __init__(self, schema: Any, **_kwargs: Any) -> None:
+            self.schema = schema
+
+        def __call__(self, value: Any) -> Any:
+            return value
+
+    voluptuous.Schema = Schema
+    voluptuous.Optional = lambda key: key
+    voluptuous.Required = lambda key: key
+    voluptuous.Invalid = ValueError
+    voluptuous.ALLOW_EXTRA = object()
 
     class HomeAssistantError(Exception):
         pass
@@ -81,6 +95,7 @@ def _install_homeassistant_stubs() -> None:
     homeassistant.helpers = helpers
     sys.modules.update(
         {
+            "voluptuous": voluptuous,
             "homeassistant": homeassistant,
             "homeassistant.components": components,
             "homeassistant.components.llm": llm,

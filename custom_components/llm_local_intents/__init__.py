@@ -5,16 +5,12 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+import voluptuous as vol
 from homeassistant.core import HomeAssistant
 
 from .catalog import IntentCatalog, build_catalog
 from .const import DOMAIN
 from .intent_adapter import get_registered_handlers
-
-try:
-    import voluptuous as vol
-except ModuleNotFoundError:  # pragma: no cover - Home Assistant supplies it.
-    vol = None  # type: ignore[assignment]
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -24,13 +20,10 @@ _GENERATION_KEY = "generation"
 _UNSUB_KEY = "unsubscribe_reload"
 
 
-if vol is not None:
-    CONFIG_SCHEMA = vol.Schema(
-        {vol.Optional(DOMAIN): dict},
-        extra=vol.ALLOW_EXTRA,
-    )
-else:
-    CONFIG_SCHEMA = None
+CONFIG_SCHEMA = vol.Schema(
+    {vol.Optional(DOMAIN): dict},
+    extra=vol.ALLOW_EXTRA,
+)
 
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
